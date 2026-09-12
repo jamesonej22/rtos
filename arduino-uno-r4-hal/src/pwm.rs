@@ -227,63 +227,171 @@ macro_rules! pwm_channel {
 #[cfg(feature = "uno-r4-minima")]
 pwm_channel!(
     /// PWM output on D6 (P106) — GPT320 ch0 / GTIOC0B.
-    d6, PwmD6, GPT320, '1', 6, true, gtccrb, gtccre, 24, GTIOR_OUTPUT_B
+    d6,
+    PwmD6,
+    GPT320,
+    '1',
+    6,
+    true,
+    gtccrb,
+    gtccre,
+    24,
+    GTIOR_OUTPUT_B
 );
 #[cfg(feature = "uno-r4-minima")]
 pwm_channel!(
     /// PWM output on D3 (P104) — GPT321 ch1 / GTIOC1B. Exclusive with D11.
-    d3, PwmD3, GPT321, '1', 4, true, gtccrb, gtccre, 24, GTIOR_OUTPUT_B
+    d3,
+    PwmD3,
+    GPT321,
+    '1',
+    4,
+    true,
+    gtccrb,
+    gtccre,
+    24,
+    GTIOR_OUTPUT_B
 );
 #[cfg(feature = "uno-r4-minima")]
 pwm_channel!(
     /// PWM output on D11 (P109) — GPT321 ch1 / GTIOC1A. Exclusive with D3.
-    d11, PwmD11, GPT321, '1', 9, true, gtccra, gtccrc, 16, GTIOR_OUTPUT_A
+    d11,
+    PwmD11,
+    GPT321,
+    '1',
+    9,
+    true,
+    gtccra,
+    gtccrc,
+    16,
+    GTIOR_OUTPUT_A
 );
 #[cfg(feature = "uno-r4-minima")]
 pwm_channel!(
     /// PWM output on D5 (P102) — GPT162 ch2 / GTIOC2B.
-    d5, PwmD5, GPT162, '1', 2, false, gtccrb, gtccre, 24, GTIOR_OUTPUT_B
+    d5,
+    PwmD5,
+    GPT162,
+    '1',
+    2,
+    false,
+    gtccrb,
+    gtccre,
+    24,
+    GTIOR_OUTPUT_B
 );
 #[cfg(feature = "uno-r4-minima")]
 pwm_channel!(
     /// PWM output on D10 (P112) — GPT163 ch3 / GTIOC3B.
-    d10, PwmD10, GPT163, '1', 12, false, gtccrb, gtccre, 24, GTIOR_OUTPUT_B
+    d10,
+    PwmD10,
+    GPT163,
+    '1',
+    12,
+    false,
+    gtccrb,
+    gtccre,
+    24,
+    GTIOR_OUTPUT_B
 );
 #[cfg(feature = "uno-r4-minima")]
 pwm_channel!(
     /// PWM output on D9 (P303) — GPT167 ch7 / GTIOC7B.
-    d9, PwmD9, GPT167, '3', 3, false, gtccrb, gtccre, 24, GTIOR_OUTPUT_B
+    d9,
+    PwmD9,
+    GPT167,
+    '3',
+    3,
+    false,
+    gtccrb,
+    gtccre,
+    24,
+    GTIOR_OUTPUT_B
 );
 
 #[cfg(feature = "uno-r4-wifi")]
 pwm_channel!(
     /// PWM output on D3 (P105) — GPT321 ch1 / GTIOC1A.
-    d3, PwmD3, GPT321, '1', 5, true, gtccra, gtccrc, 16, GTIOR_OUTPUT_A
+    d3,
+    PwmD3,
+    GPT321,
+    '1',
+    5,
+    true,
+    gtccra,
+    gtccrc,
+    16,
+    GTIOR_OUTPUT_A
 );
 #[cfg(feature = "uno-r4-wifi")]
 pwm_channel!(
     /// PWM output on D5 (P107) — GPT320 ch0 / GTIOC0A.
-    d5, PwmD5, GPT320, '1', 7, true, gtccra, gtccrc, 16, GTIOR_OUTPUT_A
+    d5,
+    PwmD5,
+    GPT320,
+    '1',
+    7,
+    true,
+    gtccra,
+    gtccrc,
+    16,
+    GTIOR_OUTPUT_A
 );
 #[cfg(feature = "uno-r4-wifi")]
 pwm_channel!(
     /// PWM output on D6 (P111) — GPT163 ch3 / GTIOC3A.
-    d6, PwmD6, GPT163, '1', 11, false, gtccra, gtccrc, 16, GTIOR_OUTPUT_A
+    d6,
+    PwmD6,
+    GPT163,
+    '1',
+    11,
+    false,
+    gtccra,
+    gtccrc,
+    16,
+    GTIOR_OUTPUT_A
 );
 #[cfg(feature = "uno-r4-wifi")]
 pwm_channel!(
     /// PWM output on D9 (P303) — GPT167 ch7 / GTIOC7B.
-    d9, PwmD9, GPT167, '3', 3, false, gtccrb, gtccre, 24, GTIOR_OUTPUT_B
+    d9,
+    PwmD9,
+    GPT167,
+    '3',
+    3,
+    false,
+    gtccrb,
+    gtccre,
+    24,
+    GTIOR_OUTPUT_B
 );
 #[cfg(feature = "uno-r4-wifi")]
 pwm_channel!(
     /// PWM output on D10 (P103) — GPT162 ch2 / GTIOC2A.
-    d10, PwmD10, GPT162, '1', 3, false, gtccra, gtccrc, 16, GTIOR_OUTPUT_A
+    d10,
+    PwmD10,
+    GPT162,
+    '1',
+    3,
+    false,
+    gtccra,
+    gtccrc,
+    16,
+    GTIOR_OUTPUT_A
 );
 #[cfg(feature = "uno-r4-wifi")]
 pwm_channel!(
     /// PWM output on D11 (P411) — GPT166 ch6 / GTIOC6A.
-    d11, PwmD11, GPT166, '4', 11, false, gtccra, gtccrc, 16, GTIOR_OUTPUT_A
+    d11,
+    PwmD11,
+    GPT166,
+    '4',
+    11,
+    false,
+    gtccra,
+    gtccrc,
+    16,
+    GTIOR_OUTPUT_A
 );
 
 #[cfg(test)]

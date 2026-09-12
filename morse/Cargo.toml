@@ -16,7 +16,7 @@ test = false
 
 [dependencies]
 arduino-hal = { git = "https://github.com/Rahix/avr-hal.git", features = [
-    "arduino-uno",
+  "arduino-uno",
 ] }
 embedded-hal = "1"
 nb = "1.1"

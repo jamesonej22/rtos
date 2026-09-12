@@ -1,7 +1,7 @@
 [general]
 board = "uno"
 open-console = true
-port = "/dev/ttyACM2"
+port = "/dev/ttyACM1"
 serial-baudrate = 57600
 
 # For documentation about this file, check here:

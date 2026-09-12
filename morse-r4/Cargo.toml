@@ -11,7 +11,7 @@ test = false
 
 [dependencies]
 arduino-uno-r4-hal = { version = "0.2", default-features = false, features = [
-    "uno-r4-wifi",
+  "uno-r4-wifi",
 ] }
 cortex-m-rt = "0.7.6"
 embedded-hal = "1"
