@@ -1,0 +1,16 @@
+[workspace]
+members = ["arduino-uno-r4-hal", "morse", "morse-r4"]
+resolver = "3"
+
+[patch.crates-io]
+arduino-uno-r4-hal = { path = "arduino-uno-r4-hal" }
+
+[profile.dev]
+codegen-units = 1
+debug = 0
+lto = true
+opt-level = "s"
+panic = "abort"
+
+[profile.release]
+panic = "abort"

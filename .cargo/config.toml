@@ -1,0 +1,10 @@
+[target.avr-none]
+runner = "ravedude"
+rustflags = ["-C", "target-cpu=atmega328p"]
+
+[target.thumbv7em-none-eabihf]
+runner = "probe-rs run --chip R7FA4M1AB"
+rustflags = ["-C", "link-arg=-Tlink.x"]
+
+[unstable]
+build-std = ["core"]

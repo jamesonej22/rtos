@@ -1,0 +1,23 @@
+[package]
+edition = "2024"
+name = "morse"
+version = "0.1.0"
+
+[lib]
+bench = false
+doctest = false
+test = false
+
+[[bin]]
+bench = false
+name = "morse"
+path = "src/main.rs"
+test = false
+
+[dependencies]
+arduino-hal = { git = "https://github.com/Rahix/avr-hal.git", features = [
+    "arduino-uno",
+] }
+embedded-hal = "1"
+nb = "1.1"
+panic-halt = "1.0.0"

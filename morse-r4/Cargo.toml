@@ -1,0 +1,20 @@
+[package]
+edition = "2024"
+name = "morse-r4"
+version = "0.1.0"
+
+[[bin]]
+bench = false
+name = "morse"
+path = "src/main.rs"
+test = false
+
+[dependencies]
+arduino-uno-r4-hal = { version = "0.2", default-features = false, features = [
+    "uno-r4-wifi",
+] }
+cortex-m-rt = "0.7.6"
+embedded-hal = "1"
+embedded-hal-nb = "1.0.0"
+nb = "1.1"
+panic-halt = "1"

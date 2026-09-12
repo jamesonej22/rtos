@@ -1,0 +1,36 @@
+[package]
+authors = ["kanade-k-1228"]
+categories = ["embedded", "hardware-support", "no-std"]
+description = "Hardware Abstraction Layer for Arduino Uno R4 (RA4M1)"
+edition = "2021"
+keywords = ["embedded", "arduino", "hal", "ra4m1", "no-std"]
+license = "MIT OR Apache-2.0"
+name = "arduino-uno-r4-hal"
+repository = "https://github.com/kanade-k-1228/arduino-uno-r4-hal"
+version = "0.2.0"
+
+[features]
+default = ["uno-r4-minima"]
+uno-r4-minima = []
+uno-r4-wifi = []
+
+[package.metadata.docs.rs]
+default-target = "thumbv7em-none-eabihf"
+features = ["uno-r4-minima"]
+
+[dependencies]
+cortex-m = { version = "0.7", features = ["critical-section-single-core"] }
+critical-section = "1"
+embedded-hal = "1.0.0"
+embedded-hal-nb = "1.0.0"
+embedded-io = "0.6"
+fugit = "0.3"
+nb = "1.1.0"
+ra4m1 = "0.2"
+
+[dev-dependencies]
+cortex-m-rt = "0.7"
+panic-halt = "0.2"
+
+[lib]
+test = false
