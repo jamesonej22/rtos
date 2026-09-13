@@ -2,7 +2,6 @@
 
 #![no_std]
 
-use arduino_uno_r4_hal::Delay;
 use core::{
     iter::Iterator,
     option::Option::{self, None, Some},
@@ -67,9 +66,10 @@ fn char_to_morse(c: char) -> Option<&'static str> {
 }
 
 /// Displays one Morse pattern on the LED.
-fn transmit_morse<L>(led: &mut L, delay: &mut Delay, morse: &str)
+fn transmit_morse<L, D>(led: &mut L, delay: &mut D, morse: &str)
 where
     L: OutputPin,
+    D: DelayNs,
 {
     for (i, symbol) in morse.chars().enumerate() {
         match symbol {
@@ -92,9 +92,10 @@ where
 }
 
 /// Converts and displays one supported letter or digit.
-fn transmit_character<L>(led: &mut L, delay: &mut Delay, c: char)
+fn transmit_character<L, D>(led: &mut L, delay: &mut D, c: char)
 where
     L: OutputPin,
+    D: DelayNs,
 {
     if let Some(morse) = char_to_morse(c) {
         transmit_morse(led, delay, morse);
@@ -102,25 +103,24 @@ where
 }
 
 /// Displays a string in Morse code, using spaces as word separators.
-pub fn transmit_string<L>(led: &mut L, delay: &mut Delay, message: &str)
+pub fn transmit_string<L, D>(led: &mut L, delay: &mut D, message: &str)
 where
     L: OutputPin,
+    D: DelayNs,
 {
     let mut chars = message.chars().peekable();
+
     while let Some(c) = chars.next() {
         if c == ' ' {
             delay.delay_ms(INTER_WORD_GAP_MILLIS);
             continue;
         }
+
         transmit_character(led, delay, c);
-        match chars.peek() {
-            Some(' ') => {
-                delay.delay_ms(INTER_WORD_GAP_MILLIS);
-            }
-            Some(_) => {
-                delay.delay_ms(INTER_CHARACTER_GAP_MILLIS);
-            }
-            None => {}
+        if let Some(next) = chars.peek()
+            && *next != ' '
+        {
+            delay.delay_ms(INTER_CHARACTER_GAP_MILLIS);
         }
     }
 }

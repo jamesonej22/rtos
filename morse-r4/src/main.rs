@@ -22,7 +22,7 @@ fn main() -> ! {
     // SCI9 -> P109/P110 -> ESP32-S3 USB bridge -> /dev/ttyACM0
     let mut serial = Serial::new_sci9(p.sci9, ARDUINO_UNO_R4_BAUD_RATE, &p.clocks).unwrap();
 
-    loop {
+    'main: loop {
         serial.write_str("morse> ").unwrap();
 
         let mut line = [0u8; 64];
@@ -39,7 +39,7 @@ fn main() -> ! {
                     serial.write_str("\r\n").unwrap();
                     break;
                 }
-
+                b'#' => break 'main,
                 byte if line_length < line.len() => {
                     line[line_length] = byte;
                     line_length += 1;
@@ -54,4 +54,6 @@ fn main() -> ! {
             transmit_string(&mut led, &mut delay, text);
         }
     }
+
+    panic!()
 }

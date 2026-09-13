@@ -18,7 +18,7 @@ fn main() -> ! {
     let mut led = pins.d13.into_output();
     let mut serial = arduino_hal::default_serial!(dp, pins, ARDUINO_UNO_R3_BAUD_RATE);
 
-    loop {
+    'main: loop {
         for byte in b"morse> ".iter().copied() {
             nb::block!(serial.write(byte)).unwrap();
         }
@@ -30,12 +30,12 @@ fn main() -> ! {
             let byte = nb::block!(serial.read()).unwrap();
 
             match byte {
-                b'\r' => {}
-                b'\n' => {
+                b'\r' | b'\n' => {
                     nb::block!(serial.write(b'\r')).unwrap();
                     nb::block!(serial.write(b'\n')).unwrap();
                     break;
                 }
+                b'#' => break 'main,
                 byte if line_length < line.len() => {
                     line[line_length] = byte;
                     line_length += 1;
@@ -49,4 +49,6 @@ fn main() -> ! {
             transmit_string(&mut led, text);
         }
     }
+
+    panic!()
 }

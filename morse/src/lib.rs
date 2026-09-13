@@ -108,14 +108,10 @@ pub fn transmit_string<L: OutputPin>(led: &mut L, message: &str) {
 
         transmit_character(led, c);
 
-        match chars.peek() {
-            Some(' ') => {
-                delay_ms(INTER_WORD_GAP_MILLIS);
-            }
-            Some(_) => {
-                delay_ms(INTER_CHARACTER_GAP_MILLIS);
-            }
-            None => {}
+        if let Some(next) = chars.peek()
+            && *next != ' '
+        {
+            delay_ms(INTER_CHARACTER_GAP_MILLIS);
         }
     }
 }
