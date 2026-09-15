@@ -2,7 +2,7 @@
 board = "uno"
 open-console = true
 port = "/dev/ttyACM0"
-serial-baudrate = 57600
+serial-baudrate = 115200
 
 # For documentation about this file, check here:
 # https://github.com/Rahix/avr-hal/blob/main/ravedude/README.md#ravedudetoml-format

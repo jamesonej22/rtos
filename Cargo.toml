@@ -1,5 +1,5 @@
 [workspace]
-members = ["arduino-uno-r4-hal", "morse", "morse-r4"]
+members = ["arduino-uno-r4-hal", "morse", "morse-r4", "temperature"]
 resolver = "3"
 
 [patch.crates-io]
