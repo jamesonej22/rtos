@@ -10,9 +10,30 @@ Rust code for the Johns Hopkins University real-time operating systems class (EN
 
 See each project README for build, flash, and serial console instructions.
 
+## Development Setup
+
+On a new laptop, install `rustup` and `uv`, clone this repository, and run:
+
+```sh
+./setup-dev.sh
+```
+
+The script installs the pinned nightly Rust toolchain and target, installs
+`taplo` for repository checks, creates the shared root Python environment, and
+enables the pre-push hook. The Python environment contains `pyserial` for the
+temperature collector:
+
+```sh
+uv run python temperature/collect.py
+```
+
+The collector expects an Arduino serial device at `/dev/ttyACM0`. Change the
+device path in `temperature/collect.py` when the laptop exposes a different
+serial device.
+
 ## Pre-push Checks
 
-Enable the repository's pre-push hook once after cloning:
+The setup script enables the repository's pre-push hook. To enable it manually:
 
 ```sh
 git config core.hooksPath .githooks
