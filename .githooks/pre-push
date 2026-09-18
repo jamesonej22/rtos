@@ -11,6 +11,12 @@ cargo fmt --all -- --check
 echo "Checking TOML formatting..."
 taplo fmt --check
 
+echo "Checking Python formatting..."
+uv run ruff format --check .
+
+echo "Linting Python..."
+uv run ruff check .
+
 echo "Running Clippy for the Uno R4 HAL..."
 cargo clippy -p arduino-uno-r4-hal \
     --target thumbv7em-none-eabihf \
@@ -32,6 +38,12 @@ echo "Running Clippy for morse..."
     cd "$ROOT/morse"
     cargo clippy --bin morse -- -D warnings
 )
+
+echo "Checking temperature..."
+cargo check -p temperature --target avr-none
+
+echo "Running Clippy for temperature..."
+cargo clippy -p temperature --target avr-none -- -D warnings
 
 echo "Building morse-r4..."
 cargo build -p morse-r4 --target thumbv7em-none-eabihf

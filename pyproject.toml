@@ -6,3 +6,6 @@ version = "0.1.0"
 
 [tool.uv]
 package = false
+
+[dependency-groups]
+dev = ["ruff>=0.13.0"]
