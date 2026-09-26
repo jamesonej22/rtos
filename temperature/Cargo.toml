@@ -3,11 +3,6 @@ edition = "2024"
 name = "temperature"
 version = "0.1.0"
 
-[lib]
-bench = false
-doctest = false
-test = false
-
 [[bin]]
 bench = false
 name = "temperature"
