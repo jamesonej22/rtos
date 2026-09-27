@@ -12,7 +12,14 @@ See each project README for build, flash, and serial console instructions.
 
 ## Development Setup
 
-On a new laptop, install `rustup` and `uv`, clone this repository, and run:
+On a new laptop, install `rustup`, `uv`, and the AVR GNU toolchain, clone this
+repository, and run:
+
+On Fedora, install the AVR toolchain with:
+
+```sh
+sudo dnf install avr-gcc avr-libc
+```
 
 ```sh
 ./setup-dev.sh

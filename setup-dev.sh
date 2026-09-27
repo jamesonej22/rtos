@@ -14,8 +14,16 @@ if ! command_exists rustup; then
     exit 1
 fi
 
+if ! command_exists avr-gcc; then
+    echo "avr-gcc is required for the morse firmware build."
+    echo "On Fedora, install it with: sudo dnf install avr-gcc avr-libc"
+    exit 1
+fi
+
 echo "Installing the repository Rust toolchain..."
-rustup toolchain install nightly --profile minimal --component rust-src --target thumbv7em-none-eabihf
+rustup toolchain install nightly-2026-09-18 --profile minimal \
+    --component clippy --component rust-src --component rustfmt \
+    --target thumbv7em-none-eabihf
 rustup toolchain install stable --profile minimal
 
 if ! command_exists taplo; then
