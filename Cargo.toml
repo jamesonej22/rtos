@@ -1,10 +1,10 @@
 [workspace]
 members = [
-    "arduino-uno-r4-hal",
-    "morse",
-    "morse-r4",
-    "propeller",
-    "temperature",
+  "arduino-uno-r4-hal",
+  "morse",
+  "morse-r4",
+  "propeller",
+  "temperature",
 ]
 resolver = "3"
 
