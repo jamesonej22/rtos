@@ -1,19 +1,20 @@
 [package]
 edition = "2024"
-name = "temperature"
+name = "propeller"
 version = "0.1.0"
 
 [[bin]]
 bench = false
-name = "temperature"
+name = "propeller"
 path = "src/main.rs"
 test = false
 
 [dependencies]
 arduino-hal = { git = "https://github.com/Rahix/avr-hal.git", features = [
-  "arduino-uno",
+    "arduino-uno",
 ] }
 avr-device = "0.8.1"
+embedded-hal = "1"
+nb = "1.1"
 panic-halt = "1.0.0"
 ufmt = "0.2.0"
-ufmt_float = "0.2.0"
