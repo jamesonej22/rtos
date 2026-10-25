@@ -6,10 +6,10 @@ use embassy_time::{Duration, Timer};
 use esp_backtrace as _;
 use esp_println::println;
 use weather::{
-    Dht11Sensor, WeatherDisplay,
     display::{show_local_conditions, show_sensor_error, show_weather},
     initialize_esp,
-    network::{initialize_network_client, parse_response, print_response, send_request},
+    network::{initialize_network_client, send_request},
+    types::WeatherResponse,
 };
 
 esp_bootloader_esp_idf::esp_app_desc!();
@@ -33,7 +33,7 @@ async fn main(spawner: Spawner) -> ! {
         };
 
         println!("HTTP status: {}", status);
-        let (weather, _) = match parse_response(body) {
+        let (weather, _) = match serde_json_core::from_slice::<WeatherResponse<'_>>(body) {
             Ok(weather) => weather,
             Err(error) => {
                 println!("Could not deserialize weather response: {:?}", error);
@@ -41,39 +41,38 @@ async fn main(spawner: Spawner) -> ! {
                 continue;
             }
         };
-        print_response(&weather);
+        println!(
+            "{}: {} ({})",
+            weather.name, weather.main.temp, weather.weather[0].description
+        );
+        println!(
+            "Feels like: {}, humidity: {}%",
+            weather.main.feels_like, weather.main.humidity
+        );
         show_weather(&mut esp.display, &weather);
 
         for sample in 0..60 {
-            update_local_conditions(&mut esp.dht11, &mut esp.display, sample % 6 == 0);
+            match esp.dht11.read() {
+                Ok(reading) => {
+                    if sample % 6 == 0 {
+                        let temperature_f = f32::from(reading.temperature) * 9.0 / 5.0 + 32.0;
+                        println!(
+                            "Local conditions: {:.1} F, {}% humidity",
+                            temperature_f, reading.humidity
+                        );
+                    }
+                    show_local_conditions(&mut esp.display, reading.temperature, reading.humidity);
+                }
+                Err(error) => {
+                    if sample % 6 == 0 {
+                        println!("DHT11 read failed: {:?}", error);
+                    }
+                    show_sensor_error(&mut esp.display);
+                }
+            }
             Timer::after(Duration::from_secs(5)).await;
             show_weather(&mut esp.display, &weather);
             Timer::after(Duration::from_secs(5)).await;
-        }
-    }
-}
-
-fn update_local_conditions(
-    sensor: &mut Dht11Sensor,
-    display: &mut WeatherDisplay,
-    log_reading: bool,
-) {
-    match sensor.read() {
-        Ok(reading) => {
-            if log_reading {
-                let temperature_f = f32::from(reading.temperature) * 9.0 / 5.0 + 32.0;
-                println!(
-                    "Local conditions: {:.1} F, {}% humidity",
-                    temperature_f, reading.humidity
-                );
-            }
-            show_local_conditions(display, reading.temperature, reading.humidity);
-        }
-        Err(error) => {
-            if log_reading {
-                println!("DHT11 read failed: {:?}", error);
-            }
-            show_sensor_error(display);
         }
     }
 }

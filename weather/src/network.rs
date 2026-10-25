@@ -21,17 +21,6 @@ const LONGITUDE: &str = env!("LONGITUDE");
 pub type WeatherHttpClient =
     HttpClient<'static, TcpClient<'static, 1, 1500, 1500>, DnsSocket<'static>>;
 
-pub fn request_url() -> heapless::String<256> {
-    let mut url = heapless::String::new();
-    write!(
-        url,
-        "https://api.openweathermap.org/data/2.5/weather?lat={}&lon={}&units=imperial&appid={}",
-        LATITUDE, LONGITUDE, API_KEY
-    )
-    .expect("weather request URL exceeds its fixed buffer");
-    url
-}
-
 pub async fn initialize_network_client(
     spawner: Spawner,
     controller: WifiController<'static>,
@@ -86,7 +75,14 @@ pub async fn send_request<'a>(
     client: &mut WeatherHttpClient,
     rx_buffer: &'a mut [u8],
 ) -> Result<(u16, &'a [u8]), reqwless::Error> {
-    let url = request_url();
+    let mut url = heapless::String::<256>::new();
+    write!(
+        url,
+        "https://api.openweathermap.org/data/2.5/weather?lat={}&lon={}&units=imperial&appid={}",
+        LATITUDE, LONGITUDE, API_KEY
+    )
+    .expect("weather request URL exceeds its fixed buffer");
+
     let mut request = client
         .request(Method::GET, &url)
         .await?
@@ -95,23 +91,6 @@ pub async fn send_request<'a>(
     let status = response.status.0;
     let body = response.body().read_to_end().await?;
     Ok((status, body))
-}
-
-pub fn parse_response(
-    body: &[u8],
-) -> serde_json_core::de::Result<(crate::types::WeatherResponse<'_>, usize)> {
-    serde_json_core::from_slice(body)
-}
-
-pub fn print_response(weather: &crate::types::WeatherResponse<'_>) {
-    println!(
-        "{}: {} ({})",
-        weather.name, weather.main.temp, weather.weather[0].description
-    );
-    println!(
-        "Feels like: {}, humidity: {}%",
-        weather.main.feels_like, weather.main.humidity
-    );
 }
 
 #[embassy_executor::task]
