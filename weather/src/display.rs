@@ -112,9 +112,6 @@ fn truncated_text<const N: usize>(text: &str) -> heapless::String<N> {
 }
 
 fn draw_weather_icon(display: &mut WeatherDisplay, weather: &WeatherResponse<'_>) {
-    let is_night = weather.dt < weather.sys.sunrise || weather.dt >= weather.sys.sunset;
-    let icon = weather.weather[0].icon;
-
     macro_rules! draw_icon {
         ($icon:expr) => {
             Image::new(&$icon, Point::new(100, 2))
@@ -123,22 +120,15 @@ fn draw_weather_icon(display: &mut WeatherDisplay, weather: &WeatherResponse<'_>
         };
     }
 
-    // Use a moon icon for clear nighttime conditions.
-    if is_night && icon.starts_with("01") {
-        draw_icon!(icons::size24px::other::HalfMoon::new(BinaryColor::On));
-        return;
-    }
-
-    match icon {
+    match weather.weather[0].icon {
         "01d" => draw_icon!(icons::size24px::weather::SunLight::new(BinaryColor::On)),
-        "01n" => draw_icon!(icons::size24px::weather::Cloud::new(BinaryColor::On)),
+        "01n" => draw_icon!(icons::size24px::other::HalfMoon::new(BinaryColor::On)),
         "02d" | "02n" => draw_icon!(icons::size24px::weather::CloudSunny::new(BinaryColor::On)),
         "03d" | "03n" | "04d" | "04n" => {
             draw_icon!(icons::size24px::weather::Cloud::new(BinaryColor::On))
         }
-        "09d" | "09n" | "10d" | "10n" => {
-            draw_icon!(icons::size24px::weather::Rain::new(BinaryColor::On))
-        }
+        "09d" | "09n" => draw_icon!(icons::size24px::weather::Rain::new(BinaryColor::On)),
+        "10d" | "10n" => draw_icon!(icons::size24px::weather::HeavyRain::new(BinaryColor::On)),
         "11d" | "11n" => draw_icon!(icons::size24px::weather::Thunderstorm::new(BinaryColor::On)),
         "13d" | "13n" => draw_icon!(icons::size24px::weather::Snow::new(BinaryColor::On)),
         "50d" | "50n" => draw_icon!(icons::size24px::weather::Fog::new(BinaryColor::On)),
