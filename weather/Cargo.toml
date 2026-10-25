@@ -1,0 +1,66 @@
+[package]
+edition = "2024"
+name = "weather"
+rust-version = "1.95"
+version = "0.1.0"
+
+[[bin]]
+name = "weather"
+path = "./src/main.rs"
+
+[dependencies]
+critical-section = "1.2.0"
+der = { version = "0.8.2", features = ["heapless"] }
+embassy-executor = "0.10.0"
+embassy-net = { version = "0.9.0", features = [
+  "dhcpv4",
+  "medium-ethernet",
+  "tcp",
+  "dns",
+] }
+embassy-time = "0.5.0"
+esp-alloc = { version = "0.11.0", features = ["esp32s3"] }
+esp-backtrace = { version = "0.20.0", features = [
+  "esp32s3",
+  "panic-handler",
+  "println",
+] }
+esp-bootloader-esp-idf = { version = "0.6.0", features = ["esp32s3", "log-04"] }
+esp-hal = { version = "~1.2.2", features = ["esp32s3", "log-04", "unstable"] }
+esp-println = { version = "0.18.0", features = ["esp32s3", "log-04"] }
+esp-radio = { version = "1.0.0-beta.1", features = [
+  "esp32s3",
+  "wifi",
+  "log-04",
+] }
+esp-rtos = { version = "0.4.0", features = [
+  "esp32s3",
+  "esp-radio",
+  "esp-alloc",
+  "embassy",
+] }
+heapless = "0.9.3"
+log = "0.4.27"
+reqwless = { version = "0.14.0", default-features = false, features = [
+  "embedded-tls",
+  "rsa",
+  "log",
+] }
+serde = { version = "1.0.229", features = ["derive"], default-features = false }
+serde-json-core = "0.7.0"
+static_cell = "2.1.0"
+
+[build-dependencies]
+dotenvy = "0.15.0"
+
+[profile.dev]
+opt-level = "s"
+
+[profile.release]
+codegen-units = 1
+debug = 2
+lto = 'fat'
+opt-level = 's'
+
+[profile.dev.package.esp-radio]
+opt-level = 's'

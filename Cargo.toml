@@ -5,6 +5,7 @@ members = [
   "morse-r4",
   "propeller",
   "temperature",
+  "weather",
 ]
 resolver = "3"
 
