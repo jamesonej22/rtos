@@ -1,7 +1,7 @@
 fn main() {
     linker_be_nice();
     check_xtensa_linker_available();
-    // make sure linkall.x is the last linker script (otherwise might cause problems with flip-link)
+    // Keep linkall.x as the final linker script so flip-link can process it correctly.
     println!("cargo:rustc-link-arg=-Tlinkall.x");
     load_environment();
 }
@@ -15,7 +15,7 @@ fn load_environment() {
         dotenvy::from_path(env_file).expect("Failed to load .env");
     }
 
-    // Pass required values through to rustc at compile time.
+    // Pass the required values through to rustc at compile time.
     for key in [
         "SSID",
         "PASSWORD",
@@ -141,7 +141,6 @@ fn linker_be_nice() {
                 }
                 _ => (),
             },
-            // we don't have anything helpful for "missing-lib" yet
             _ => {
                 std::process::exit(1);
             }

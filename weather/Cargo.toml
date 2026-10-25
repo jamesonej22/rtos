@@ -10,7 +10,6 @@ name = "weather"
 path = "./src/main.rs"
 
 [dependencies]
-critical-section = "1.2.0"
 der = { version = "0.8.2", features = ["heapless"] }
 embassy-executor = "0.10.0"
 embassy-net = { version = "0.9.0", features = [
@@ -22,6 +21,7 @@ embassy-net = { version = "0.9.0", features = [
 embassy-time = "0.5.0"
 embedded-dht-rs = { version = "0.5.0", features = ["dht11"] }
 embedded-graphics = "0.8.2"
+embedded-iconoir = "0.2.3"
 esp-alloc = { version = "0.11.0", features = ["esp32s3"] }
 esp-backtrace = { version = "0.20.0", features = [
   "esp32s3",
@@ -43,7 +43,6 @@ esp-rtos = { version = "0.4.0", features = [
   "embassy",
 ] }
 heapless = "0.9.3"
-log = "0.4.27"
 reqwless = { version = "0.14.0", default-features = false, features = [
   "embedded-tls",
   "rsa",
@@ -56,6 +55,9 @@ static_cell = "2.1.0"
 
 [build-dependencies]
 dotenvy = "0.15.0"
+
+[package.metadata.cargo-machete]
+ignored = ["der"]
 
 [profile.dev]
 opt-level = "s"

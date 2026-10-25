@@ -6,7 +6,8 @@ use embassy_time::{Duration, Timer};
 use esp_backtrace as _;
 use esp_println::println;
 use weather::{
-    display::show_weather,
+    Dht11Sensor, WeatherDisplay,
+    display::{show_local_conditions, show_sensor_error, show_weather},
     initialize_esp,
     network::{initialize_network_client, parse_response, print_response, send_request},
 };
@@ -43,8 +44,36 @@ async fn main(spawner: Spawner) -> ! {
         print_response(&weather);
         show_weather(&mut esp.display, &weather);
 
-        // OpenWeather recommends avoiding repeated requests
-        // more frequently than once every 10 minutes per location.
-        Timer::after(Duration::from_secs(600)).await;
+        for sample in 0..60 {
+            update_local_conditions(&mut esp.dht11, &mut esp.display, sample % 6 == 0);
+            Timer::after(Duration::from_secs(5)).await;
+            show_weather(&mut esp.display, &weather);
+            Timer::after(Duration::from_secs(5)).await;
+        }
+    }
+}
+
+fn update_local_conditions(
+    sensor: &mut Dht11Sensor,
+    display: &mut WeatherDisplay,
+    log_reading: bool,
+) {
+    match sensor.read() {
+        Ok(reading) => {
+            if log_reading {
+                let temperature_f = f32::from(reading.temperature) * 9.0 / 5.0 + 32.0;
+                println!(
+                    "Local conditions: {:.1} F, {}% humidity",
+                    temperature_f, reading.humidity
+                );
+            }
+            show_local_conditions(display, reading.temperature, reading.humidity);
+        }
+        Err(error) => {
+            if log_reading {
+                println!("DHT11 read failed: {:?}", error);
+            }
+            show_sensor_error(display);
+        }
     }
 }
