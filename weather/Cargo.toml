@@ -1,4 +1,5 @@
 [package]
+default-run = "weather"
 edition = "2024"
 name = "weather"
 rust-version = "1.95"
@@ -19,6 +20,8 @@ embassy-net = { version = "0.9.0", features = [
   "dns",
 ] }
 embassy-time = "0.5.0"
+embedded-dht-rs = { version = "0.5.0", features = ["dht11"] }
+embedded-graphics = "0.8.2"
 esp-alloc = { version = "0.11.0", features = ["esp32s3"] }
 esp-backtrace = { version = "0.20.0", features = [
   "esp32s3",
@@ -48,6 +51,7 @@ reqwless = { version = "0.14.0", default-features = false, features = [
 ] }
 serde = { version = "1.0.229", features = ["derive"], default-features = false }
 serde-json-core = "0.7.0"
+ssd1306 = "0.10.0"
 static_cell = "2.1.0"
 
 [build-dependencies]
