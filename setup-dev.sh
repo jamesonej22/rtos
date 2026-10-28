@@ -33,6 +33,27 @@ else
     echo "taplo already installed."
 fi
 
+if ! command_exists espup; then
+    echo "Installing espup..."
+    cargo +stable install espup --locked
+else
+    echo "espup already installed."
+fi
+
+if [[ ! -f "$HOME/export-esp.sh" ]]; then
+    echo "Installing the ESP Rust toolchain..."
+    espup install
+else
+    echo "ESP Rust toolchain export already exists."
+fi
+
+if ! command_exists espflash; then
+    echo "Installing espflash..."
+    cargo +stable install espflash --locked
+else
+    echo "espflash already installed."
+fi
+
 if ! command_exists uv; then
     echo "uv is required. Install it from https://docs.astral.sh/uv/getting-started/installation/ and run this script again."
     exit 1
@@ -49,9 +70,15 @@ cat <<'EOF'
 Development environment ready.
 
 Python collector:
+  uv run python propeller/collect.py
   uv run python temperature/collect.py
 
 Rust checks:
   cargo fmt --all
   cargo build --workspace
+
+ESP32-S3 weather project:
+  source ~/export-esp.sh
+  cd weather
+  cargo build
 EOF

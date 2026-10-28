@@ -33,6 +33,7 @@ fn load_environment() {
 #[cfg(unix)]
 fn check_xtensa_linker_available() {
     println!("cargo:rerun-if-env-changed=PATH");
+    println!("cargo:rerun-if-env-changed=HOME");
 
     let target = std::env::var("TARGET").unwrap_or_default();
     println!(
@@ -50,15 +51,21 @@ fn check_xtensa_linker_available() {
         Err(error) => error,
     };
 
-    let export_file = std::env::var("HOME")
-        .map(|home| format!("{home}/export-esp.sh"))
-        .unwrap_or_else(|_| "$HOME/export-esp.sh".to_string());
+    let export_file_exists = std::env::var_os("HOME")
+        .map(|home| std::path::Path::new(&home).join("export-esp.sh").is_file())
+        .unwrap_or(false);
+    let setup_hint = if export_file_exists {
+        "The ESP toolchain is installed, but its environment may not be loaded in this shell.\n\
+         Run `source \"$HOME/export-esp.sh\"` in the same shell before invoking Cargo."
+    } else {
+        "The ESP toolchain export file is missing.\n\
+         Run `./setup-dev.sh` from the repository root, then source `~/export-esp.sh` \
+         in the same shell before invoking Cargo."
+    };
 
     panic!(
         "Xtensa linker `{linker}` was not found in PATH or could not be executed: {error}.\n\n\
-         Xtensa targets on Unix require espup's environment export file to be sourced before building.\n\
-         Try: `source {export_file}`\n\n\
-         If the export file does not exist, run `espup install` first.\n\
+         {setup_hint}\n\n\
          For more details, see:\n\
          https://github.com/esp-rs/espup?tab=readme-ov-file#environment-variables-setup"
     );
