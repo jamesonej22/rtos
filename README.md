@@ -22,8 +22,17 @@ their own toolchain requirements.
 
 ## Development Setup
 
-For the Uno R3 projects, install `rustup`, `uv`, and the AVR GNU toolchain,
-clone this repository, then run:
+Install the system prerequisites for your platform, clone this repository,
+then run `./setup-dev.sh`. The script installs Rust with `rustup`, `taplo`,
+`uv`, and the repository's Rust toolchains.
+
+On Raspberry Pi OS (64-bit recommended), install the build tools and AVR
+toolchain with:
+
+```sh
+sudo apt update
+sudo apt install build-essential curl gcc-avr avr-libc git libudev-dev pkg-config
+```
 
 On Fedora, install the AVR toolchain with:
 
@@ -31,15 +40,19 @@ On Fedora, install the AVR toolchain with:
 sudo dnf install avr-gcc avr-libc
 ```
 
+Then, from the repository root, run:
+
 ```sh
 ./setup-dev.sh
 ```
 
-The script installs the pinned nightly Rust toolchain and the Uno R4 target,
-installs `taplo`, `espup`, and `espflash`, sets up the ESP Rust toolchain,
-creates the shared root Python environment, and enables the pre-push hook. The
-Python environment includes `pyserial` and `matplotlib`, used by the data
-collectors:
+The script adds Cargo and `uv` to `PATH` in `~/.profile` and `~/.bashrc`,
+installs the pinned nightly Rust toolchain and Uno R4 target, creates the shared
+Python environment, and enables the pre-push hook. On supported hosts it also
+installs `espup` and `espflash` and sets up the ESP Rust toolchain. ESP toolchain
+setup is skipped on ARM Linux hosts such as Raspberry Pi; use an x86_64 Linux
+host to build the weather firmware. The Python environment includes `pyserial`
+and `matplotlib`, used by the data collectors:
 
 ```sh
 uv run python propeller/collect.py
@@ -64,8 +77,8 @@ run:
 git config core.hooksPath .githooks
 ```
 
-The hook checks Rust, TOML, and Python formatting, runs Python linting, checks
-and lints the Uno R3 temperature project, runs Clippy on the Uno R4 HAL and
-Morse projects, and builds the Uno R3 Morse and Uno R4 Morse projects. It
-requires `taplo` and `uv`. The propeller and weather projects are not currently
-included in the hook.
+The hook checks Rust and TOML formatting, formats and lints Python, and runs
+build and Clippy checks for the GPS dashboard, Uno R3 and Uno R4 firmware,
+temperature logger, and propeller RPM logger. Weather firmware checks also run
+when the ESP toolchain export and weather credentials are available; otherwise
+the hook reports that they were skipped. The hook requires `taplo` and `uv`.

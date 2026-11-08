@@ -17,6 +17,13 @@ uv run ruff format --check .
 echo "Linting Python..."
 uv run ruff check .
 
+echo "Checking GPS dashboard..."
+(
+    cd "$ROOT/gps-dashboard"
+    cargo clippy --all-targets --locked -- -D warnings
+    cargo test --locked
+)
+
 echo "Running Clippy for the Uno R4 HAL..."
 cargo clippy -p arduino-uno-r4-hal \
     --target thumbv7em-none-eabihf \
@@ -45,6 +52,13 @@ cargo check -p temperature --target avr-none
 echo "Running Clippy for temperature..."
 cargo clippy -p temperature --target avr-none -- -D warnings
 
+echo "Checking propeller..."
+(
+    cd "$ROOT/propeller"
+    cargo clippy --all-targets -- -D warnings
+    cargo build
+)
+
 echo "Building morse-r4..."
 cargo build -p morse-r4 --target thumbv7em-none-eabihf
 
@@ -53,5 +67,27 @@ echo "Building morse..."
     cd "$ROOT/morse"
     cargo build
 )
+
+if [ -f "$HOME/export-esp.sh" ] && {
+    [ -f "$ROOT/weather/.env" ] ||
+        {
+            [ -n "${SSID:-}" ] &&
+                [ -n "${PASSWORD:-}" ] &&
+                [ -n "${OPENWEATHER_API_KEY:-}" ] &&
+                [ -n "${LATITUDE:-}" ] &&
+                [ -n "${LONGITUDE:-}" ];
+        }
+}; then
+    echo "Checking weather..."
+    (
+        cd "$ROOT/weather"
+        # shellcheck disable=SC1091
+        source "$HOME/export-esp.sh"
+        cargo clippy --bin weather -- -D warnings
+        cargo build --bin weather
+    )
+else
+    echo "Skipping weather checks: ESP toolchain export and weather credentials are required."
+fi
 
 echo "Pre-push checks passed."
