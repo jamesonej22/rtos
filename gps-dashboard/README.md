@@ -26,9 +26,10 @@ Open [http://localhost:8080](http://localhost:8080) in a browser. The server
 also provides the current telemetry as JSON at `/api/gps` and as a live
 Server-Sent Events stream at `/api/gps/stream`.
 
-The server listens on port `8080` on all network interfaces. GPSD must be
-reachable at `127.0.0.1:2947`; this address is currently configured in the
-application.
+The server listens on port `8080` on all network interfaces and logs the
+address selected by the system's default network route at startup. Open that
+address from another device on the same network. GPSD must be reachable at
+`127.0.0.1:2947`; this address is currently configured in the application.
 
 ## Checks
 
@@ -37,5 +38,4 @@ Run these commands from this directory:
 ```sh
 cargo fmt --check
 cargo clippy --all-targets -- -D warnings
-cargo test
 ```

@@ -1,4 +1,7 @@
-use std::convert::Infallible;
+use std::{
+    convert::Infallible,
+    net::{IpAddr, UdpSocket},
+};
 
 use axum::{
     Router,
@@ -13,6 +16,21 @@ use tokio::sync::watch;
 use tower_http::services::ServeDir;
 
 use crate::gps::GpsTelemetry;
+
+fn default_route_ip() -> std::io::Result<IpAddr> {
+    let socket = UdpSocket::bind("0.0.0.0:0")?;
+    // Connecting a UDP socket selects the system's default route without sending data.
+    socket.connect("192.0.2.1:80")?;
+
+    let ip = socket.local_addr()?.ip();
+    if ip.is_unspecified() {
+        return Err(std::io::Error::other(
+            "default route did not select a local IP address",
+        ));
+    }
+
+    Ok(ip)
+}
 
 #[derive(Clone)]
 struct AppState {
@@ -74,7 +92,13 @@ pub async fn run_api_server(
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await?;
 
-    tracing::info!("GPS dashboard listening on http://0.0.0.0:8080");
+    match default_route_ip() {
+        Ok(ip) => tracing::info!("GPS dashboard available at http://{ip}:8080"),
+        Err(error) => {
+            tracing::warn!("Could not determine the network IP address: {error}");
+            tracing::info!("GPS dashboard listening on all interfaces at 0.0.0.0:8080");
+        }
+    }
 
     axum::serve(listener, app).await?;
 
