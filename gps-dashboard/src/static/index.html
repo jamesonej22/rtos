@@ -46,22 +46,20 @@
                         <div>
                             <h2>GPS Position</h2>
                             <p>Live aircraft location and flight path</p>
+                            <p id="map-position-notice" class="map-notice">
+                                Showing the assumed default location until a GPS fix is received.
+                            </p>
                         </div>
                         <span class="panel-tag">LIVE MAP</span>
                     </div>
 
                     <div id="map">
-                        <div id="map-placeholder" class="map-placeholder">
-                            <div class="placeholder-icon">◎</div>
-                            <strong>Waiting for GPS fix</strong>
-                            <span>Position will appear when the receiver acquires a fix.</span>
-                        </div>
                     </div>
 
                     <div class="map-footer">
                         <span><span class="legend-dot position-dot"></span> Current position</span>
                         <span><span class="legend-line"></span> Flight path</span>
-                        <span id="map-coordinates">Position unavailable</span>
+                        <span id="map-coordinates">Assumed default location</span>
                     </div>
                 </section>
 

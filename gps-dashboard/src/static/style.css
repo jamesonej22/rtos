@@ -188,6 +188,16 @@ body {
     letter-spacing: 0;
 }
 
+.panel-header .map-notice {
+    color: var(--yellow);
+    font-size: 11px;
+    letter-spacing: 0;
+}
+
+.map-notice.hidden {
+    display: none;
+}
+
 .panel-tag {
     border: 1px solid var(--border);
     color: var(--muted);
@@ -201,39 +211,6 @@ body {
     height: 430px;
     background: var(--map-background);
     position: relative;
-}
-
-.map-placeholder {
-    position: absolute;
-    inset: 0;
-    z-index: 500;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    background: var(--map-background);
-    text-align: center;
-    padding: 20px;
-    pointer-events: none;
-}
-
-.map-placeholder.hidden {
-    display: none;
-}
-
-.placeholder-icon {
-    font-size: 45px;
-    color: var(--accent);
-}
-
-.map-placeholder strong {
-    font-size: 15px;
-}
-
-.map-placeholder span {
-    color: var(--muted);
-    font-size: 12px;
 }
 
 .map-footer {

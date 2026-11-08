@@ -21,7 +21,13 @@ function formatCoordinate(value, positive, negative) {
     return `${Math.abs(value).toFixed(6)}° ${direction}`;
 }
 
-const map = L.map("map", { zoomControl: true }).setView([39.0, -96.0], 4);
+// Replace these coordinates with your preferred startup map location.
+const DEFAULT_POSITION = { latitude: 38.88697, longitude: -77.09401 };
+
+const map = L.map("map", { zoomControl: true }).setView(
+    [DEFAULT_POSITION.latitude, DEFAULT_POSITION.longitude],
+    16,
+);
 
 L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
@@ -29,13 +35,24 @@ L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }).addTo(map);
 
-let positionMarker = null;
+let positionMarker = L.circleMarker(
+    [DEFAULT_POSITION.latitude, DEFAULT_POSITION.longitude],
+    {
+        radius: 8,
+        color: "#ffffff",
+        weight: 2,
+        fillColor: "#facc15",
+        fillOpacity: 1,
+    },
+)
+    .addTo(map)
+    .bindPopup("Assumed default location (waiting for GPS fix)");
 let flightPath = null;
 let hasCenteredMap = false;
+let hasGpsPosition = false;
 
 const trackPoints = [];
 const MAX_TRACK_POINTS = 500;
-const mapPlaceholder = document.getElementById("map-placeholder");
 
 function updateConnectionStatus(connected) {
     const dot = document.getElementById("connection-dot");
@@ -71,36 +88,25 @@ function updatePosition(latitude, longitude) {
         Math.abs(longitude) <= 180;
 
     if (!validPosition) {
-        if (positionMarker === null) {
-            mapPlaceholder.classList.remove("hidden");
-        }
-
         return;
     }
 
     const position = [latitude, longitude];
 
-    mapPlaceholder.classList.add("hidden");
+    document.getElementById("map-position-notice").classList.add("hidden");
     setText("latitude", formatCoordinate(latitude, "N", "S"));
     setText("longitude", formatCoordinate(longitude, "E", "W"));
     setText("map-coordinates", `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
 
-    if (positionMarker === null) {
-        positionMarker = L.circleMarker(position, {
-            radius: 8,
-            color: "#ffffff",
-            weight: 2,
-            fillColor: "#38bdf8",
-            fillOpacity: 1,
-        })
-            .addTo(map)
-            .bindPopup("Current GPS position");
-
+    if (!hasGpsPosition) {
+        positionMarker.setStyle({ fillColor: "#38bdf8" });
+        positionMarker.setPopupContent("Current GPS position");
         flightPath = L.polyline([], {
             color: "#38bdf8",
             weight: 3,
             opacity: 0.85,
         }).addTo(map);
+        hasGpsPosition = true;
     }
 
     positionMarker.setLatLng(position);

@@ -31,6 +31,11 @@ address selected by the system's default network route at startup. Open that
 address from another device on the same network. GPSD must be reachable at
 `127.0.0.1:2947`; this address is currently configured in the application.
 
+Before a GPS fix is available, the map shows an assumed startup location. To
+change it, edit `DEFAULT_POSITION` near the top of `src/static/app.js` and set
+its `latitude` and `longitude`. The assumed marker is replaced by the GPS
+position when a fix arrives.
+
 ## Checks
 
 Run these commands from this directory:
