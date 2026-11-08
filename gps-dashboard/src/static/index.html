@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="theme-color" content="#101722">
+        <title>UAV GPS Telemetry</title>
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+            integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+            crossorigin=""
+        >
+        <link rel="stylesheet" href="/style.css">
+    </head>
+    <body>
+        <div class="app-shell">
+            <header class="topbar">
+                <div class="brand">
+                    <div class="brand-icon">UAV</div>
+                    <div>
+                        <h1>Flight Telemetry</h1>
+                        <p>GROUND STATION / GPS MONITOR</p>
+                    </div>
+                </div>
+
+                <div class="status-group">
+                    <div class="status-item">
+                        <span id="connection-dot" class="status-dot offline"></span>
+                        <span id="connection-status">Connecting</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">GPS FIX</span>
+                        <span id="fix-status" class="fix-badge no-fix">NO FIX</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">LAST UPDATE</span>
+                        <span id="last-update">--</span>
+                    </div>
+                </div>
+            </header>
+
+            <main class="dashboard">
+                <section class="panel map-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2>GPS Position</h2>
+                            <p>Live aircraft location and flight path</p>
+                        </div>
+                        <span class="panel-tag">LIVE MAP</span>
+                    </div>
+
+                    <div id="map">
+                        <div id="map-placeholder" class="map-placeholder">
+                            <div class="placeholder-icon">◎</div>
+                            <strong>Waiting for GPS fix</strong>
+                            <span>Position will appear when the receiver acquires a fix.</span>
+                        </div>
+                    </div>
+
+                    <div class="map-footer">
+                        <span><span class="legend-dot position-dot"></span> Current position</span>
+                        <span><span class="legend-line"></span> Flight path</span>
+                        <span id="map-coordinates">Position unavailable</span>
+                    </div>
+                </section>
+
+                <section class="panel telemetry-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2>Flight Telemetry</h2>
+                            <p>Current navigation solution</p>
+                        </div>
+                        <span class="panel-tag">GPS DATA</span>
+                    </div>
+
+                    <div class="telemetry-grid">
+                        <div class="metric-card">
+                            <span class="metric-label">ALTITUDE</span>
+                            <div class="metric-value"><span id="altitude">--</span> <small>m</small></div>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-label">GROUND SPEED</span>
+                            <div class="metric-value"><span id="speed">--</span> <small>km/h</small></div>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-label">HEADING</span>
+                            <div class="metric-value"><span id="heading">--</span> <small>°</small></div>
+                        </div>
+                        <div class="metric-card">
+                            <span class="metric-label">VERTICAL SPEED</span>
+                            <div class="metric-value"><span id="climb">--</span> <small>m/s</small></div>
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+                    <h3 class="subsection-title">Position</h3>
+                    <div class="data-row">
+                        <span>Latitude</span>
+                        <strong id="latitude">--</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>Longitude</span>
+                        <strong id="longitude">--</strong>
+                    </div>
+
+                    <div class="section-divider"></div>
+                    <h3 class="subsection-title">Satellite Information</h3>
+                    <div class="satellite-summary">
+                        <div>
+                            <strong id="satellites-used">--</strong>
+                            <span>Used</span>
+                        </div>
+                        <div>
+                            <strong id="satellites-visible">--</strong>
+                            <span>Visible</span>
+                        </div>
+                    </div>
+                    <div class="satellite-bar">
+                        <div id="satellite-bar-fill"></div>
+                    </div>
+                    <p class="satellite-caption" id="satellite-caption">
+                        Waiting for satellite information
+                    </p>
+                </section>
+
+                <section class="panel video-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2>Aircraft Video</h2>
+                            <p>Reserved for future RTSP integration</p>
+                        </div>
+                        <span class="panel-tag">VIDEO</span>
+                    </div>
+                    <div class="video-placeholder">
+                        <div class="video-icon">▶</div>
+                        <strong>Video feed unavailable</strong>
+                        <span>This area is reserved for the aircraft camera stream.</span>
+                        <span class="video-protocol">RTSP INTEGRATION PLANNED</span>
+                    </div>
+                </section>
+
+                <section class="panel system-panel">
+                    <div class="panel-header">
+                        <div>
+                            <h2>System Information</h2>
+                            <p>Receiver and telemetry connection</p>
+                        </div>
+                    </div>
+                    <div class="data-row">
+                        <span>GPSD connection</span>
+                        <strong id="gpsd-status">--</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>GPS device</span>
+                        <strong id="gps-device">--</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>GPS time (UTC)</span>
+                        <strong id="gps-time">--</strong>
+                    </div>
+                    <div class="data-row">
+                        <span>Fix mode</span>
+                        <strong id="gps-mode">--</strong>
+                    </div>
+                </section>
+            </main>
+
+            <footer>
+                <span>UAV GROUND STATION</span>
+                <span>GPS TELEMETRY SYSTEM</span>
+            </footer>
+        </div>
+
+        <script
+            src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""
+        ></script>
+        <script src="/app.js"></script>
+    </body>
+</html>

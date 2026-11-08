@@ -2,19 +2,23 @@
 
 Rust firmware and tools for the Johns Hopkins University real-time operating
 systems class (EN.605.715). The repository is a Cargo workspace containing
-projects for the Arduino Uno R3, Arduino Uno R4 WiFi, and ESP32-S3.
+projects for the Arduino Uno R3, Arduino Uno R4 WiFi, ESP32-S3, and a GPS
+telemetry dashboard.
 
 ## Projects
 
 - [`morse`](morse/): Morse code LED application for the Arduino Uno R3.
 - [`morse-r4`](morse-r4/): Morse code LED application for the Arduino Uno R4 WiFi.
 - [`arduino-uno-r4-hal`](arduino-uno-r4-hal/): Class-modified HAL for the Uno R4 Minima and WiFi boards, used by `morse-r4`.
+- [`gps-dashboard`](gps-dashboard/): Stable-Rust GPS telemetry dashboard that reads from GPSD and serves a local web interface.
 - [`propeller`](propeller/): Uno R3 firmware to measure propeller RPM with an IR beam-break sensor, plus a live data collector and plotter.
 - [`temperature`](temperature/): Uno R3 temperature logger, plus a serial data collector and plotter.
 - [`weather`](weather/): ESP32-S3 Wi-Fi weather display with an OLED and local DHT11 sensor.
 
 See each project README for hardware connections, project-specific
 prerequisites, build and upload commands, and data collection instructions.
+The GPS dashboard uses the stable Rust toolchain; the embedded projects use
+their own toolchain requirements.
 
 ## Development Setup
 

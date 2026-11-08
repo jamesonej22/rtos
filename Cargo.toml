@@ -1,6 +1,7 @@
 [workspace]
 members = [
   "arduino-uno-r4-hal",
+  "gps-dashboard",
   "morse",
   "morse-r4",
   "propeller",
