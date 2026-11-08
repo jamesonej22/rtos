@@ -1,12 +1,12 @@
 [workspace]
 members = [
-  "arduino-uno-r4-hal",
-  "gps-dashboard",
-  "morse",
-  "morse-r4",
-  "propeller",
-  "temperature",
-  "weather",
+    "arduino-uno-r4-hal",
+    "gps-dashboard",
+    "morse",
+    "morse-r4",
+    "propeller",
+    "temperature",
+    "weather",
 ]
 resolver = "3"
 
