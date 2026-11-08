@@ -8,7 +8,13 @@ flight path, speed, altitude, heading, and satellite information.
 
 - Stable Rust (1.85 or newer)
 - GPSD running on `127.0.0.1:2947` and connected to a GPS receiver
-- An internet connection for the Leaflet map library and OpenStreetMap tiles
+- An internet connection for the Leaflet map library and CARTO map tiles
+
+The map uses CARTO's Positron basemap, including labels. The CARTO basemap API
+key is configured as `CARTO_API_KEY` in `src/static/app.js`. Since the key is
+used by browser JavaScript, it is visible to visitors; restrict it using
+CARTO's available settings. OpenStreetMap and CARTO attribution is shown on the
+map.
 
 The package selects the stable Rust toolchain independently of the embedded
 projects in the workspace.

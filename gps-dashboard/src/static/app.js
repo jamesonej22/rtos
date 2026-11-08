@@ -23,17 +23,24 @@ function formatCoordinate(value, positive, negative) {
 
 // Replace these coordinates with your preferred startup map location.
 const DEFAULT_POSITION = { latitude: 38.88697, longitude: -77.09401 };
+const DEFAULT_ZOOM = 17;
+// Add your CARTO API key here. Browser-based map keys are visible to visitors.
+const CARTO_API_KEY = "CARTO_API_KEY";
 
 const map = L.map("map", { zoomControl: true }).setView(
     [DEFAULT_POSITION.latitude, DEFAULT_POSITION.longitude],
-    16,
+    DEFAULT_ZOOM,
 );
 
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 19,
-    attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-}).addTo(map);
+L.tileLayer(
+    `https://{s}.basemaps.cartocdn.com/rastertiles/dark_nolabels/{z}/{x}/{y}.png?key=${encodeURIComponent(CARTO_API_KEY)}`,
+    {
+        maxZoom: 19,
+        subdomains: "abcd",
+        attribution:
+            '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+    },
+).addTo(map);
 
 let positionMarker = L.circleMarker(
     [DEFAULT_POSITION.latitude, DEFAULT_POSITION.longitude],
@@ -124,7 +131,7 @@ function updatePosition(latitude, longitude) {
     }
 
     if (!hasCenteredMap) {
-        map.setView(position, 16);
+        map.setView(position, DEFAULT_ZOOM);
         hasCenteredMap = true;
     }
 }
